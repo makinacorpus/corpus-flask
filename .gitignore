@@ -1,0 +1,9 @@
+*pyc
+makina-states.flask-deploy.log
+.buildout/
+.installed.cfg
+.mr.developer.cfg
+bin/
+eggs/
+salt.cfg
+salt_config.py
