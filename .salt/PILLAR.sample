@@ -13,7 +13,11 @@
 # with the relevant pillar
 makina-states.projectname:
   data:
+    app_root: "{project_root}"
+    py_root: "{project_root}/venv"
+    py: "{py_root}/bin/python"
     domain: foo.mydomain.tld
+    server_aliases: []
     nginx_upstreams: salt://makina-projects/{name}/files/nginx.upstreams.conf
     nginx_vhost: salt://makina-projects/{name}/files/nginx.content.conf
     ERROR_MAIL_FROM: "root@{domain}"
@@ -31,6 +35,9 @@ makina-states.projectname:
     DATABASE_FILE: '{data_root}/app.sqlite'
     SQLALCHEMY_DATABASE_URI: 'sqlite:///{DATABASE_FILE}'
     SQLALCHEMY_RECORD_QUERIES: False
+    WSGI: app.app
+    # http_users:
+    #   - root: foo
   env_defaults:
     dev:
       SQLALCHEMY_RECORD_QUERIES: True

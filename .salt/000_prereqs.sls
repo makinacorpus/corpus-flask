@@ -11,16 +11,14 @@
 
 prepreqs-{{cfg.name}}:
   pkg.installed:
+    - watch:
+      - user: {{cfg.name}}-www-data
     - pkgs:
-      - nginx
       - sqlite3
-      - libsqlite3-dev
-      - apache2-utils
-      - libcurl4-gnutls-dev
-      - sqlite3
-      #
       - liblcms2-2
       - liblcms2-dev
+      - libcairomm-1.0-dev
+      - libcairo2-dev
       - libsqlite3-dev
       - apache2-utils
       - autoconf
@@ -28,6 +26,8 @@ prepreqs-{{cfg.name}}:
       - build-essential
       - bzip2
       - gettext
+      - libpq-dev
+      - libmysqlclient-dev
       - git
       - groff
       - libbz2-dev
@@ -61,37 +61,27 @@ prepreqs-{{cfg.name}}:
       - tcl8.5
       - tcl8.5-dev
       - tk8.5-dev
-      - zlib1g-dev      
+      - cython
+      - python-numpy
+      - zlib1g-dev
 
 {{cfg.name}}-dirs:
   file.directory:
     - makedirs: true
+    - user: {{cfg.user}}
+    - group: {{cfg.group}}
     - watch:
       - pkg: prepreqs-{{cfg.name}}
       - user: {{cfg.name}}-www-data
     - names:
       - {{cfg.data_root}}/cache
-      - {{cfg.data_root}}/eggs
-      - {{cfg.data_root}}/parts
       - {{data.DATA_FOLDER}}
 
-{{cfg.name}}-buildout:
-  file.managed:
-    - name: {{cfg.project_root}}/salt.cfg
-    - source: salt://makina-projects/{{cfg.name}}/files/salt.cfg
-    - template: jinja
-    - user: {{cfg.user}}
-    - data: |
-            {{scfg}}
-    - group: {{cfg.group}}
-    - makedirs: true
+{% for i in ['cache'] %}
+{{cfg.name}}-l-dirs-{{i}}:
+  file.symlink:
     - watch:
       - file: {{cfg.name}}-dirs
-  buildout.installed:
-    - config: salt.cfg
-    - name: {{cfg.project_root}}
-    - user: {{cfg.user}}
-    - watch:
-      - file: {{cfg.name}}-buildout
-    - user: {{cfg.user}}
-    - group: {{cfg.group}}
+    - name: {{cfg.project_root}}/{{i}}
+    - target: {{cfg.data_root}}/{{i}}
+{%endfor %}

@@ -2,6 +2,12 @@
 {% set data = cfg.data %}
 {% set scfg = salt['mc_utils.json_dump'](cfg) %}
 
+
+{% macro set_env() %}
+    - env:
+      - FLASK_MODEULE: "salt_config"
+{% endmacro %}
+
 {{cfg.name}}-config:
   file.managed:
     - name: {{cfg.project_root}}/salt_config.py
@@ -15,8 +21,9 @@
 
 dbinstall-{{cfg.name}}:
   cmd.run:
-    - name: {{cfg.project_root}}/bin/build_db
+    - name: {{data.py}} -c "from app import build_sample_db;build_sample_db()"
     - unless: test $(sqlite3 {{data.DATABASE_FILE}} "select count(*) from user") -gt 0
+    {{ set_env}}
     - cwd: {{cfg.project_root}}
     - user: {{cfg.user}}
     - watch:
