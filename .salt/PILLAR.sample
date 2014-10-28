@@ -14,6 +14,7 @@
 makina-states.projectname:
   data:
     app_root: "{project_root}"
+    htaccess: "/etc/{name}.webaccess"
     py_root: "{project_root}/venv"
     py: "{py_root}/bin/python"
     domain: foo.mydomain.tld
