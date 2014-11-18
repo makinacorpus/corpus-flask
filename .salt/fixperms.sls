@@ -24,8 +24,6 @@
               "{{locs.resetperms}}" "${@}" \
               --dmode '0770' --fmode '0770'  \
               --paths "{{cfg.project_root}}" \
-              --paths "{{data.static}}" \
-              --paths "{{data.media}}" \
               --paths "{{cfg.data_root}}" \
               --users www-data \
               --excludes="{{data.py_root}}/lib" \

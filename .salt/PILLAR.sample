@@ -13,11 +13,13 @@
 # with the relevant pillar
 makina-states.projectname:
   data:
-    app_root: "{project_root}"
+    requirements: "{project_root}/requirements.txt"
+    app_root: "{project_root}/src/{PROJECT}"
+    PROJECT: "{name}"
     htaccess: "/etc/{name}.webaccess"
     py_root: "{project_root}/venv"
     py: "{py_root}/bin/python"
-    domain: foo.mydomain.tld
+    domain: "{fqdn}"
     server_aliases: []
     nginx_upstreams: salt://makina-projects/{name}/files/nginx.upstreams.conf
     nginx_vhost: salt://makina-projects/{name}/files/nginx.content.conf
@@ -26,8 +28,9 @@ makina-states.projectname:
     static: "{data_root}/static"
     host: localhost
     port: 8080
-    workers: 1
-    appdata_root: "{data_root}/app"
+    workers: 10
+    worker_class: sync
+    worker_timeout: 9000
     ADMIN: fadmin
     PASSWORD: fadmin
     BASE_DIR: "{project_root}"

@@ -10,7 +10,7 @@
 
 {{cfg.name}}-config:
   file.managed:
-    - name: {{cfg.project_root}}/salt_config.py
+    - name: {{cfg.project_root}}/src/salt_config.py
     - source: salt://makina-projects/{{cfg.name}}/files/config.py
     - template: jinja
     - user: {{cfg.user}}
