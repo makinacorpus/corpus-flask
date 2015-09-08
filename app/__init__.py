@@ -9,6 +9,9 @@ from flask.ext.admin import helpers, expose
 import logging
 from logging.handlers import SMTPHandler
 from logging import StreamHandler
+from flask.ext.script import Manager
+from flask.ext.script import Server
+from flask.ext.script import Shell
 
 CONFIG_MODULE = os.environ.get('FLASK_MODULE', 'app.config')
 # Create Flask application
@@ -24,6 +27,14 @@ from .models import *
 from logging import Formatter
 
 ADMINS = app.config['ERROR_MAIL_TO'].split(',')
+
+def _make_context():
+    return globals()
+
+
+manager_script = Manager(app)
+manager_script.add_command("runserver", Server())
+manager_script.add_command("shell", Shell(make_context=_make_context))
 
 if not app.debug:
     mail_handler = SMTPHandler(

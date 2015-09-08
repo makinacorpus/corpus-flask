@@ -63,7 +63,7 @@ makina-projects.projectname:
     workers: 10
     worker_class: sync
     worker_timeout: 9000
-    DATABASE_FILE: '{data_root}/app.sqlite'
+    DATABASE_FILE: '{data_root}/{PROJECT}.sqlite'
     flask_settings:
       ERROR_MAIL_FROM: "root@{domain}"
       ERROR_MAIL_TO:  "root@{domain}"
