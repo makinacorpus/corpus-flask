@@ -1,6 +1,12 @@
 {% set cfg = opts.ms_project %}
 {% set data = cfg.data %}
 {% set scfg = salt['mc_utils.json_dump'](cfg) %}
+{% set is_pg = 'postg' in data.django_settings.DATABASES.default.ENGINE %}
+{% if is_pg %}
+include:
+  - makina-states.services.gis.ubuntugis
+  - makina-states.services.db.postgresql.client
+{% endif %}
 {{cfg.name}}-htaccess:
   file.managed:
     - name: {{data.htaccess}}
@@ -23,7 +29,7 @@
       - file: {{cfg.name}}-htaccess
 {% endfor %}
 {% endfor %}
-{% endif %}  
+{% endif %}
 
 {{cfg.name}}-www-data:
   user.present:
@@ -35,63 +41,67 @@
 prepreqs-{{cfg.name}}:
   pkg.installed:
     - watch:
+      {% if is_pg %}
+      - mc_proxy: ubuntugis-post-hardrestart-hook
+      {% endif %}
       - user: {{cfg.name}}-www-data
     - pkgs:
+      - sqlite3
+      - liblcms2-2
+      - liblcms2-dev
+      - libcairomm-1.0-dev
+      - libcairo2-dev
+      - libsqlite3-dev
       - apache2-utils
       - autoconf
       - automake
       - build-essential
       - bzip2
-      - cython
       - gettext
+      - libpq-dev
+      - libmysqlclient-dev
       - git
       - groff
       - libbz2-dev
-      - libcairo2-dev
-      - libcairomm-1.0-dev
       - libcurl4-openssl-dev
       - libdb-dev
-      - libfreetype6-dev
       - libgdbm-dev
-      - liblcms2-2
-      - liblcms2-dev
-      - libmysqlclient-dev
-      - libopenjpeg2
-      - libopenjpeg-dev
-      - libpq-dev
       - libreadline-dev
+      - libfreetype6-dev
       - libsigc++-2.0-dev
       - libsqlite0-dev
       - libsqlite3-dev
-      - libssl-dev
       - libtiff5
       - libtiff5-dev
-      - libtool
       - libwebp5
       - libwebp-dev
+      - libssl-dev
+      - libtool
       - libxml2-dev
       - libxslt1-dev
+      - libopenjpeg-dev
+      - libopenjpeg2
       - m4
       - man-db
       - pkg-config
       - poppler-utils
       - python-dev
       - python-imaging
-      - python-numpy
       - python-setuptools
-      - sqlite3
       - tcl8.4
       - tcl8.4-dev
       - tcl8.5
       - tcl8.5-dev
       - tk8.5-dev
+      - cython
+      - python-numpy
       - zlib1g-dev
       # geodjango
-      - libspatialite-dev
-      - libspatialite5
       - gdal-bin
       - libgdal1-dev
       - libgeos-dev
+      - geoip-bin
+      - libgeoip-dev
 
 {{cfg.name}}-dirs:
   file.directory:

@@ -11,23 +11,56 @@
 # the current projectname
 # you can also merge parts of this file
 # with the relevant pillar
-makina-states.projectname:
+
+makina-projects.projectname:
   data:
-    requirements: "{project_root}/requirements.txt"
-    app_root: "{project_root}/src/{PROJECT}"
-    PROJECT: "{name}"
+    PROJECT: mysite
+    app_root: "{project_root}/{PROJECT}"
+    #app_url: "git@git.foo/goo.git"
+    #app_url_rev: "master"
+    #app_url_type: git
+    #app_url_tar_opts: "xzvf"
+    #app_url_archive_format: tar
+    #app_download_root: "{app_root}"
+    #app_url_hash: "md5=123"
+    #app_archive_test_exists: 'test ! -e {data_root}/www/index.php'
+    js_dir: "{app_root}/front_end"
+    gulp_targets: ["clean-build"]
+    do_bower: false
+    do_gulp: false
+    configs:
+      {% for i in ['src/localconfig.py'] %}
+      "{{i}}":
+        source: "salt://makina-projects/{name}/files/localconfig.py"
+        target: "{app_root}/{PROJECT}/{{i}}"
+        mode: 640
+      {%endfor%}
+      #foo.py:
+      #  target: "{data_root}/test/bar.py"
     htaccess: "/etc/{name}.webaccess"
-    py_root: "{project_root}/venv"
     py: "{py_root}/bin/python"
+    py_root: "{project_root}/venv"
     domain: "{fqdn}"
+    requirements: "{project_root}/requirements.txt"
     server_aliases: []
+    #force_ssl: false
+    #disabled_urls []
+    #ldap_url: "ldap://ldap.net/dc=m,dc=com?uid?sub?(objectClass=person)"
+    #admin_url: /admin
+    #admin_allowed_ips :[]
+    WSGI: app.app
+    nginx_loglevel: "crit"
     nginx_upstreams: salt://makina-projects/{name}/files/nginx.upstreams.conf
     nginx_vhost: salt://makina-projects/{name}/files/nginx.content.conf
+    #ftp_ip: "x.x.x.x"
+    #ftp_port_range: "22300 22400"
+    #ftp_users:
+    #  - ftpuser: {'password': 'xxx', "home": "{data_root}/foo"}
     ERROR_MAIL_FROM: "root@{domain}"
     ERROR_MAIL_TO:  "root@{domain}"
     static: "{data_root}/static"
     host: localhost
-    port: 8080
+    port: 8180
     workers: 10
     worker_class: sync
     worker_timeout: 9000
@@ -39,11 +72,10 @@ makina-states.projectname:
     DATABASE_FILE: '{data_root}/app.sqlite'
     SQLALCHEMY_DATABASE_URI: 'sqlite:///{DATABASE_FILE}'
     SQLALCHEMY_RECORD_QUERIES: False
-    WSGI: app.app
     # http_users:
     #   - root: foo
   env_defaults:
     dev:
-      SQLALCHEMY_RECORD_QUERIES: True
-
-# vim:set ft=yaml:
+      django_settings:
+        DEBUG: True
+# vim:set ft=sls:
