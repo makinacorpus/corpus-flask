@@ -10,6 +10,7 @@ from config import *
 import logging
 from logging.handlers import SMTPHandler
 from logging import StreamHandler
+
 CONFIG_MODULE = os.environ.get('FLASK_MODULE', 'config')
 # Create Flask application
 app = Flask(__name__)
@@ -24,6 +25,7 @@ from app.models import *
 from logging import Formatter
 
 ADMINS = app.config['ERROR_MAIL_TO'].split(',')
+
 if not app.debug:
     mail_handler = SMTPHandler(
         '127.0.0.1',
@@ -69,8 +71,5 @@ def build_sample_db():
     db.session.add(admin_user)
 
     db.session.commit()
-    return
-
-build_sample_db()
 
 from app import views

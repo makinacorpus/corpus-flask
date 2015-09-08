@@ -14,8 +14,9 @@
 
 makina-projects.projectname:
   data:
-    PROJECT: mysite
+    PROJECT: app
     app_root: "{project_root}/{PROJECT}"
+    appdata_root: "{data_root}/{PROJECT}"
     #app_url: "git@git.foo/goo.git"
     #app_url_rev: "master"
     #app_url_type: git
@@ -48,7 +49,7 @@ makina-projects.projectname:
     #ldap_url: "ldap://ldap.net/dc=m,dc=com?uid?sub?(objectClass=person)"
     #admin_url: /admin
     #admin_allowed_ips :[]
-    WSGI: app.app
+    WSGI: "{PROJECT}.app"
     nginx_loglevel: "crit"
     nginx_upstreams: salt://makina-projects/{name}/files/nginx.upstreams.conf
     nginx_vhost: salt://makina-projects/{name}/files/nginx.content.conf
@@ -56,26 +57,27 @@ makina-projects.projectname:
     #ftp_port_range: "22300 22400"
     #ftp_users:
     #  - ftpuser: {'password': 'xxx', "home": "{data_root}/foo"}
-    ERROR_MAIL_FROM: "root@{domain}"
-    ERROR_MAIL_TO:  "root@{domain}"
     static: "{data_root}/static"
     host: localhost
     port: 8180
     workers: 10
     worker_class: sync
     worker_timeout: 9000
-    ADMIN: fadmin
-    PASSWORD: fadmin
-    BASE_DIR: "{project_root}"
-    SECRET_KEY: 'development key'
-    DATA_FOLDER: "{appdata_root}"
-    DATABASE_FILE: '{data_root}/app.sqlite'
-    SQLALCHEMY_DATABASE_URI: 'sqlite:///{DATABASE_FILE}'
-    SQLALCHEMY_RECORD_QUERIES: False
+    flask_settings:
+      ERROR_MAIL_FROM: "root@{domain}"
+      ERROR_MAIL_TO:  "root@{domain}"
+      ADMIN: fadmin
+      PASSWORD: fadmin
+      BASE_DIR: "{project_root}"
+      SECRET_KEY: 'development key'
+      DATA_FOLDER: "{appdata_root}"
+      DATABASE_FILE: '{data_root}/app.sqlite'
+      SQLALCHEMY_DATABASE_URI: 'sqlite:///{DATABASE_FILE}'
+      SQLALCHEMY_RECORD_QUERIES: False
     # http_users:
     #   - root: foo
   env_defaults:
     dev:
-      django_settings:
+      flask_settings:
         DEBUG: True
 # vim:set ft=sls:

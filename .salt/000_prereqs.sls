@@ -1,7 +1,6 @@
 {% set cfg = opts.ms_project %}
 {% set data = cfg.data %}
-{% set scfg = salt['mc_utils.json_dump'](cfg) %}
-{% set is_pg = 'postg' in data.django_settings.DATABASES.default.ENGINE %}
+{% set is_pg = 'postg' in data.flask_settings.SQLALCHEMY_DATABASE_URI %}
 {% if is_pg %}
 include:
   - makina-states.services.gis.ubuntugis
@@ -113,7 +112,7 @@ prepreqs-{{cfg.name}}:
       - user: {{cfg.name}}-www-data
     - names:
       - {{cfg.data_root}}/cache
-      - {{data.DATA_FOLDER}}
+      - {{data.flask_settings.DATA_FOLDER}}
 
 {% for i in ['cache'] %}
 {{cfg.name}}-l-dirs-{{i}}:
