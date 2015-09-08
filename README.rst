@@ -62,5 +62,6 @@ Manual run::
 
     . bin/activate
     # export FLASK_SETTINGS=some.alternate.python_module from src/app/config.py
-    python -m app.manage
+    python -m app.manage runserver
+    # python -m app.manage shell
 
