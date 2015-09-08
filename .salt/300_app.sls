@@ -7,15 +7,15 @@ include:
 
 {% macro set_env() %}
     - env:
-      - FLASK_MODEULE: "localconfig"
+      - FLASK_MODULE: "app.localconfig"
 {% endmacro %}
 
 dbinstall-{{cfg.name}}:
   cmd.run:
     - name: {{data.py}} -c "from {{data.PROJECT}} import build_sample_db;build_sample_db()"
     - unless: test $(sqlite3 {{data.DATABASE_FILE}} "select count(*) from user") -gt 0
-    {{ set_env}}
+    {{ set_env()}}
     - cwd: {{cfg.project_root}}
     - user: {{cfg.user}}
     - watch:
-      - file: {{cfg.name}}-config
+      - mc_proxy: {{cfg.name}}-configs-post

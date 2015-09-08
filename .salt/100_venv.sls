@@ -14,7 +14,7 @@
             pip install -r "{{data.requirements}}" --download-cache "{{cfg.data_root}}/cache"
     - env:
        - CFLAGS: "-I/usr/include/gdal"
-    - cwd: {{data.app_root}}
+    - cwd: {{cfg.project_root}}
     - use_vt: true
     - download_cache: {{cfg.data_root}}/cache
     - user: {{cfg.user}}
@@ -36,7 +36,7 @@
             pip install -e .
     - env:
        - CFLAGS: "-I/usr/include/gdal"
-    - cwd: {{data.app_root}}
+    - cwd: {{cfg.project_root}}
     - onlyif: test -e setup.py
     - use_vt: true
     - download_cache: {{cfg.data_root}}/cache

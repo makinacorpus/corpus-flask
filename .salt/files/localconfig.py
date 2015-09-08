@@ -4,12 +4,14 @@ from __future__ import (print_function,
                         division,
                         absolute_import)
 
-try:
-    from config import *
-except ImportError:
-    pass
+
 {%- set cfg = salt['mc_project.get_configuration'](cfg) %}
 {%- set data = cfg.data %}
+
+try:
+    from {{data.PROJECT}}.config import *
+except ImportError: 
+    pass
 
 {%- macro render_setting(setting, value=None) %}
 {%- set setting = setting.strip() %}

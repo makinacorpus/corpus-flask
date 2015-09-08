@@ -30,10 +30,10 @@ makina-projects.projectname:
     do_bower: false
     do_gulp: false
     configs:
-      {% for i in ['src/localconfig.py'] %}
+      {% for i in ['localconfig.py'] %}
       "{{i}}":
         source: "salt://makina-projects/{name}/files/localconfig.py"
-        target: "{app_root}/{PROJECT}/{{i}}"
+        target: "{app_root}/{{i}}"
         mode: 640
       {%endfor%}
       #foo.py:
@@ -49,7 +49,7 @@ makina-projects.projectname:
     #ldap_url: "ldap://ldap.net/dc=m,dc=com?uid?sub?(objectClass=person)"
     #admin_url: /admin
     #admin_allowed_ips :[]
-    WSGI: "{PROJECT}.app"
+    WSGI: "{PROJECT}:app"
     nginx_loglevel: "crit"
     nginx_upstreams: salt://makina-projects/{name}/files/nginx.upstreams.conf
     nginx_vhost: salt://makina-projects/{name}/files/nginx.content.conf
@@ -63,6 +63,7 @@ makina-projects.projectname:
     workers: 10
     worker_class: sync
     worker_timeout: 9000
+    DATABASE_FILE: '{data_root}/app.sqlite'
     flask_settings:
       ERROR_MAIL_FROM: "root@{domain}"
       ERROR_MAIL_TO:  "root@{domain}"
@@ -71,7 +72,7 @@ makina-projects.projectname:
       BASE_DIR: "{project_root}"
       SECRET_KEY: 'development key'
       DATA_FOLDER: "{appdata_root}"
-      DATABASE_FILE: '{data_root}/app.sqlite'
+      DATABASE_FILE: '{DATABASE_FILE}'
       SQLALCHEMY_DATABASE_URI: 'sqlite:///{DATABASE_FILE}'
       SQLALCHEMY_RECORD_QUERIES: False
     # http_users:

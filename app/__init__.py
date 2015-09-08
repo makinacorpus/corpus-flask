@@ -6,12 +6,11 @@ from wtforms import form, fields, validators
 from flask.ext import admin, login
 from flask.ext.admin.contrib import sqla
 from flask.ext.admin import helpers, expose
-from config import *
 import logging
 from logging.handlers import SMTPHandler
 from logging import StreamHandler
 
-CONFIG_MODULE = os.environ.get('FLASK_MODULE', 'config')
+CONFIG_MODULE = os.environ.get('FLASK_MODULE', 'app.config')
 # Create Flask application
 app = Flask(__name__)
 app.config.from_object(CONFIG_MODULE)
@@ -20,8 +19,8 @@ app.config.from_object(CONFIG_MODULE)
 import sqlalchemy.exc
 db = SQLAlchemy(app)
 
-from app import auth
-from app.models import *
+from . import auth
+from .models import *
 from logging import Formatter
 
 ADMINS = app.config['ERROR_MAIL_TO'].split(',')
@@ -72,4 +71,4 @@ def build_sample_db():
 
     db.session.commit()
 
-from app import views
+from . import views

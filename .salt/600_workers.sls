@@ -19,7 +19,7 @@ include:
       data.py_root,
       data.worker_class,
       data.worker_timeout),
-  'environment': {'FLASK_MODULE': 'localconfig'},
+  'environment': {'FLASK_MODULE': 'app.localconfig'},
   'uid': cfg.user,
   'gid': cfg.group,
   'copy_env': True,

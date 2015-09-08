@@ -1,4 +1,7 @@
 *pyc
+*.egg-info
+/cache
+/venv/
 makina-states.flask-deploy.log
 .buildout/
 .installed.cfg
@@ -7,3 +10,4 @@ bin/
 eggs/
 salt.cfg
 salt_config.py
+app/localconfig.py

@@ -57,3 +57,10 @@ USE/Install With makina-states
     git fetch --all
     git push github master:prod
 
+
+Manual run::
+
+    . bin/activate
+    # export FLASK_SETTINGS=some.alternate.python_module from src/app/config.py
+    python -m app.run
+

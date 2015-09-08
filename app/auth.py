@@ -7,8 +7,8 @@ from wtforms import form, fields, validators
 from flask.ext import admin, login
 from flask.ext.admin.contrib import sqla
 from flask.ext.admin import helpers, expose
-from app import app, db
-from app.models import *
+from . import app, db
+from .models import *
 
 # Initialize flask-login
 def init_login():
@@ -59,3 +59,17 @@ class MyAdminIndexView(admin.AdminIndexView):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+
+# Initialize flask-login
+init_login()
+
+# Create admin
+admin = admin.Admin(app,
+                    'MyApp',
+                    index_view=MyAdminIndexView(),
+                    base_template='my_master.html')
+
+# Add view
+admin.add_view(MyModelView(User, db.session))
